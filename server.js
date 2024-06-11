@@ -1,12 +1,18 @@
 require('dotenv').config();
-const express = require('express');
+ 
+
+  const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const userRouter = require('./routes/user');
 const courseRouter = require('./routes/course');
 const app = express();
 
 app.use(bodyParser.json());
+
+// Enable CORS
+app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URL, {

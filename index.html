@@ -112,129 +112,169 @@
         async function signup() {
             const username = document.getElementById('signupUsername').value;
             const password = document.getElementById('signupPassword').value;
-            const response = await fetch(`${document.getElementById('baseUrl').value}/users/signup`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
-            const data = await response.json();
-            displayResponse('signupResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/users/signup`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                displayResponse('signupResponse', data);
+            } catch (error) {
+                displayResponse('signupResponse', { error: error.message });
+            }
         }
 
         async function login() {
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
-            const response = await fetch(`${document.getElementById('baseUrl').value}/users/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username, password })
-            });
-            const data = await response.json();
-            displayResponse('loginResponse', data);
-            token = data.token || '';
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/users/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+                displayResponse('loginResponse', data);
+                token = data.token || '';
+            } catch (error) {
+                displayResponse('loginResponse', { error: error.message });
+            }
         }
 
         async function viewCourses() {
-            const response = await fetch(`${document.getElementById('baseUrl').value}/courses`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const data = await response.json();
-            displayResponse('viewCoursesResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/courses`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                displayResponse('viewCoursesResponse', data);
+            } catch (error) {
+                displayResponse('viewCoursesResponse', { error: error.message });
+            }
         }
 
         async function getLatestCourses() {
-            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/latest`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const data = await response.json();
-            displayResponse('getLatestCoursesResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/latest`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                displayResponse('getLatestCoursesResponse', data);
+            } catch (error) {
+                displayResponse('getLatestCoursesResponse', { error: error.message });
+            }
         }
 
         async function getRecommendedCourses() {
-            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/recommended`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const data = await response.json();
-            displayResponse('getRecommendedCoursesResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/recommended`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                displayResponse('getRecommendedCoursesResponse', data);
+            } catch (error) {
+                displayResponse('getRecommendedCoursesResponse', { error: error.message });
+            }
         }
 
         async function getCourseDetails() {
             const courseId = document.getElementById('courseId').value;
-            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-            const data = await response.json();
-            displayResponse('getCourseDetailsResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                displayResponse('getCourseDetailsResponse', data);
+            } catch (error) {
+                displayResponse('getCourseDetailsResponse', { error: error.message });
+            }
         }
 
         async function reviewCourse() {
             const courseId = document.getElementById('reviewCourseId').value;
             const text = document.getElementById('reviewText').value;
             const rating = document.getElementById('reviewRating').value;
-            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/review`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ text, rating })
-            });
-            const data = await response.json();
-            displayResponse('reviewCourseResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/review`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ text, rating })
+                });
+                const data = await response.json();
+                displayResponse('reviewCourseResponse', data);
+            } catch (error) {
+                displayResponse('reviewCourseResponse', { error: error.message });
+            }
         }
 
         async function likeCourse() {
             const courseId = document.getElementById('likeCourseId').value;
-            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/like`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            displayResponse('likeCourseResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                displayResponse('likeCourseResponse', data);
+            } catch (error) {
+                displayResponse('likeCourseResponse', { error: error.message });
+            }
         }
 
         async function unlikeCourse() {
             const courseId = document.getElementById('unlikeCourseId').value;
-            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/unlike`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            displayResponse('unlikeCourseResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/unlike`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                displayResponse('unlikeCourseResponse', data);
+            } catch (error) {
+                displayResponse('unlikeCourseResponse', { error: error.message });
+            }
         }
 
         async function getFavouriteCourses() {
-            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/favourites`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-            const data = await response.json();
-            displayResponse('getFavouriteCoursesResponse', data);
+            try {
+                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/favourites`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                displayResponse('getFavouriteCoursesResponse', data);
+            } catch (error) {
+                displayResponse('getFavouriteCoursesResponse', { error: error.message });
+            }
         }
     </script>
 </body>
