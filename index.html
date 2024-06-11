@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section input, .section textarea, .section select {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+        }
+        .section button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .section button:hover {
+            background-color: #0056b3;
+        }
+        .response {
+            white-space: pre-wrap;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>API Test Interface</h1>
+    <div class="section">
+        <h2>API Base URL</h2>
+        <input type="text" id="baseUrl" placeholder="http://localhost:3000" value="http://localhost:3000">
+    </div>
+    <div class="section">
+        <h2>Signup</h2>
+        <input type="text" id="signupUsername" placeholder="Username">
+        <input type="password" id="signupPassword" placeholder="Password">
+        <button onclick="signup()">Signup</button>
+        <div class="response" id="signupResponse"></div>
+    </div>
+    <div class="section">
+        <h2>Login</h2>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <div class="response" id="loginResponse"></div>
+    </div>
+    <div class="section">
+        <h2>View Courses</h2>
+        <button onclick="viewCourses()">View Courses</button>
+        <div class="response" id="viewCoursesResponse"></div>
+    </div>
+    <div class="section">
+        <h2>Get Latest Courses</h2>
+        <button onclick="getLatestCourses()">Get Latest Courses</button>
+        <div class="response" id="getLatestCoursesResponse"></div>
+    </div>
+    <div class="section">
+        <h2>Get Recommended Courses</h2>
+        <button onclick="getRecommendedCourses()">Get Recommended Courses</button>
+        <div class="response" id="getRecommendedCoursesResponse"></div>
+    </div>
+    <div class="section">
+        <h2>Get Course Details</h2>
+        <input type="text" id="courseId" placeholder="Course ID">
+        <button onclick="getCourseDetails()">Get Course Details</button>
+        <div class="response" id="getCourseDetailsResponse"></div>
+    </div>
+    <div class="section">
+        <h2>Review Course</h2>
+        <input type="text" id="reviewCourseId" placeholder="Course ID">
+        <textarea id="reviewText" placeholder="Review Text"></textarea>
+        <input type="number" id="reviewRating" placeholder="Rating (0-5)">
+        <button onclick="reviewCourse()">Review Course</button>
+        <div class="response" id="reviewCourseResponse"></div>
+    </div>
+    <div class="section">
+        <h2>Like a Course</h2>
+        <input type="text" id="likeCourseId" placeholder="Course ID">
+        <button onclick="likeCourse()">Like Course</button>
+        <div class="response" id="likeCourseResponse"></div>
+    </div>
+    <div class="section">
+        <h2>Unlike a Course</h2>
+        <input type="text" id="unlikeCourseId" placeholder="Course ID">
+        <button onclick="unlikeCourse()">Unlike Course</button>
+        <div class="response" id="unlikeCourseResponse"></div>
+    </div>
+    <div class="section">
+        <h2>Get Favourite Courses</h2>
+        <button onclick="getFavouriteCourses()">Get Favourite Courses</button>
+        <div class="response" id="getFavouriteCoursesResponse"></div>
+    </div>
+    <script>
+        let token = '';
+
+        function displayResponse(id, response) {
+            document.getElementById(id).textContent = JSON.stringify(response, null, 2);
+        }
+
+        async function signup() {
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+            const response = await fetch(`${document.getElementById('baseUrl').value}/users/signup`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await response.json();
+            displayResponse('signupResponse', data);
+        }
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            const response = await fetch(`${document.getElementById('baseUrl').value}/users/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username, password })
+            });
+            const data = await response.json();
+            displayResponse('loginResponse', data);
+            token = data.token || '';
+        }
+
+        async function viewCourses() {
+            const response = await fetch(`${document.getElementById('baseUrl').value}/courses`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            displayResponse('viewCoursesResponse', data);
+        }
+
+        async function getLatestCourses() {
+            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/latest`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            displayResponse('getLatestCoursesResponse', data);
+        }
+
+        async function getRecommendedCourses() {
+            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/recommended`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            displayResponse('getRecommendedCoursesResponse', data);
+        }
+
+        async function getCourseDetails() {
+            const courseId = document.getElementById('courseId').value;
+            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+            displayResponse('getCourseDetailsResponse', data);
+        }
+
+        async function reviewCourse() {
+            const courseId = document.getElementById('reviewCourseId').value;
+            const text = document.getElementById('reviewText').value;
+            const rating = document.getElementById('reviewRating').value;
+            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/review`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ text, rating })
+            });
+            const data = await response.json();
+            displayResponse('reviewCourseResponse', data);
+        }
+
+        async function likeCourse() {
+            const courseId = document.getElementById('likeCourseId').value;
+            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/like`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            displayResponse('likeCourseResponse', data);
+        }
+
+        async function unlikeCourse() {
+            const courseId = document.getElementById('unlikeCourseId').value;
+            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/unlike`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            displayResponse('unlikeCourseResponse', data);
+        }
+
+        async function getFavouriteCourses() {
+            const response = await fetch(`${document.getElementById('baseUrl').value}/courses/favourites`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            const data = await response.json();
+            displayResponse('getFavouriteCoursesResponse', data);
+        }
+    </script>
+</body>
+</html>
