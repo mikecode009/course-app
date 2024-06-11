@@ -22,6 +22,16 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.post('/add', auth, async (req, res) => {
+  const course = new Course(req.body);
+  try {
+    await course.save();
+    res.status(201).send(course);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+});
+
 router.get('/latest', async (req, res) => {
   try {
     const courses = await Course.find({}).sort({ _id: -1 }).limit(10);

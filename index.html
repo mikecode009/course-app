@@ -39,10 +39,6 @@
 <body>
     <h1>API Test Interface</h1>
     <div class="section">
-        <h2>API Base URL</h2>
-        <input type="text" id="baseUrl" placeholder="http://localhost:3000" value="http://localhost:3000">
-    </div>
-    <div class="section">
         <h2>Signup</h2>
         <input type="text" id="signupUsername" placeholder="Username">
         <input type="password" id="signupPassword" placeholder="Password">
@@ -78,6 +74,13 @@
         <div class="response" id="getCourseDetailsResponse"></div>
     </div>
     <div class="section">
+        <h2>Add Course</h2>
+        <input type="text" id="courseName" placeholder="Course Name">
+        <textarea id="courseDescription" placeholder="Course Description"></textarea>
+        <button onclick="addCourse()">Add Course</button>
+        <div class="response" id="addCourseResponse"></div>
+    </div>
+    <div class="section">
         <h2>Review Course</h2>
         <input type="text" id="reviewCourseId" placeholder="Course ID">
         <textarea id="reviewText" placeholder="Review Text"></textarea>
@@ -103,6 +106,8 @@
         <div class="response" id="getFavouriteCoursesResponse"></div>
     </div>
     <script>
+        const baseUrl = `${window.location.origin.replace('8080', '3000')}`;
+
         let token = '';
 
         function displayResponse(id, response) {
@@ -113,7 +118,7 @@
             const username = document.getElementById('signupUsername').value;
             const password = document.getElementById('signupPassword').value;
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/users/signup`, {
+                const response = await fetch(`${baseUrl}/users/signup`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -131,7 +136,7 @@
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/users/login`, {
+                const response = await fetch(`${baseUrl}/users/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -148,7 +153,7 @@
 
         async function viewCourses() {
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/courses`, {
+                const response = await fetch(`${baseUrl}/courses`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -163,7 +168,7 @@
 
         async function getLatestCourses() {
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/latest`, {
+                const response = await fetch(`${baseUrl}/courses/latest`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -178,7 +183,7 @@
 
         async function getRecommendedCourses() {
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/recommended`, {
+                const response = await fetch(`${baseUrl}/courses/recommended`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -194,7 +199,7 @@
         async function getCourseDetails() {
             const courseId = document.getElementById('courseId').value;
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}`, {
+                const response = await fetch(`${baseUrl}/courses/${courseId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
@@ -207,12 +212,31 @@
             }
         }
 
+        async function addCourse() {
+            const name = document.getElementById('courseName').value;
+            const description = document.getElementById('courseDescription').value;
+            try {
+                const response = await fetch(`${baseUrl}/courses/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ name, description })
+                });
+                const data = await response.json();
+                displayResponse('addCourseResponse', data);
+            } catch (error) {
+                displayResponse('addCourseResponse', { error: error.message });
+            }
+        }
+
         async function reviewCourse() {
             const courseId = document.getElementById('reviewCourseId').value;
             const text = document.getElementById('reviewText').value;
             const rating = document.getElementById('reviewRating').value;
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/review`, {
+                const response = await fetch(`${baseUrl}/courses/${courseId}/review`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -230,7 +254,7 @@
         async function likeCourse() {
             const courseId = document.getElementById('likeCourseId').value;
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/like`, {
+                const response = await fetch(`${baseUrl}/courses/${courseId}/like`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -247,7 +271,7 @@
         async function unlikeCourse() {
             const courseId = document.getElementById('unlikeCourseId').value;
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/${courseId}/unlike`, {
+                const response = await fetch(`${baseUrl}/courses/${courseId}/unlike`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -263,7 +287,7 @@
 
         async function getFavouriteCourses() {
             try {
-                const response = await fetch(`${document.getElementById('baseUrl').value}/courses/favourites`, {
+                const response = await fetch(`${baseUrl}/courses/favourites`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
