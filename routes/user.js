@@ -5,6 +5,7 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
+  console.log("signup")
   const user = new User(req.body);
   try {
     await user.save();
